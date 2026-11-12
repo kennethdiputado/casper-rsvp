@@ -4,6 +4,12 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Casper's Christening · January 10, 2027</title>
+<meta name="description" content="You are invited to the christening of Casper C. Diputado on January 10, 2027 at San Roque Parish, Liloan, followed by lunch at Orosia Food Park.">
+<meta property="og:title" content="Casper's Christening · January 10, 2027">
+<meta property="og:description" content="You are invited to the christening of Casper C. Diputado on January 10, 2027. Please RSVP.">
+<meta property="og:type" content="website">
+<meta property="og:image" content="https://kennethdiputado.github.io/casper-rsvp/casper-img.jpg">
+<meta name="twitter:card" content="summary_large_image">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
@@ -85,6 +91,37 @@
   .hint { font-size: 13px; color: var(--muted); margin-top: 18px; }
 
   footer { text-align: center; color: var(--muted); padding: 36px 0 56px; font-family: var(--serif); font-style: italic; font-size: 16px; }
+
+  /* ---- Motion: subtle and gentle ---- */
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+  @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+  @keyframes drift {
+    0%   { transform: translate(0, 0) rotate(-8deg); }
+    50%  { transform: translate(24px, -55vh) rotate(8deg); }
+    100% { transform: translate(-12px, -115vh) rotate(-6deg); }
+  }
+  .hero, .card { animation: fadeUp 0.9s ease both; }
+  .card:nth-of-type(2) { animation-delay: 0.15s; }
+  .step { animation: fadeIn 0.6s ease both; }
+  .hero > *:not(.photo-placeholder) { animation: fadeIn 1s ease both; }
+  .photo-placeholder { animation: fadeIn 1s ease both; }
+  button { transition: transform 0.2s ease, filter 0.2s ease; }
+  button:hover { transform: translateY(-1px); }
+  button:active { transform: translateY(0); }
+  input, select { transition: border-color 0.2s ease, box-shadow 0.2s ease; }
+
+  /* Floating teddy bears behind the content */
+  .bears { position: fixed; inset: 0; overflow: hidden; pointer-events: none; z-index: 0; }
+  .bear {
+    position: absolute; bottom: -80px; opacity: 0.16;
+    animation-name: drift; animation-timing-function: ease-in-out; animation-iteration-count: infinite;
+  }
+  main, header, footer { position: relative; z-index: 1; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .bears, .bear, .hero, .card, .step, .hero > *, .photo-placeholder { animation: none !important; }
+    button { transition: none; }
+  }
 </style>
 </head>
 <body>
@@ -92,7 +129,7 @@
 <header class="hero wrap">
   <div class="cross">✝</div>
   <!-- PHOTO PLACEHOLDER: replace this div with <img src="YOUR_PHOTO_URL" alt="Casper" style="width:180px;height:180px;border-radius:50%;object-fit:cover;"> -->
-  <div class="photo-placeholder">Photo of Casper</div>
+  <img class="photo" src="casper-img.jpg" alt="Casper C. Diputado" style="width:180px;height:180px;margin:20px auto 0;display:block;border-radius:50%;object-fit:cover;border:2px solid var(--accent);">
   <div class="eyebrow">You are invited to the christening of</div>
   <h1>Casper C. Diputado</h1>
   <p class="parents">Son of Kenneth T. Diputado and Kristine Jane Cartuciano</p>
@@ -157,7 +194,7 @@
       <h2>Kindly confirm your attendance</h2>
 
       <!-- Step 1: access code -->
-      <div id="codeStep">
+      <div id="codeStep" class="step">
         <p>Type your access code to continue.</p>
         <form class="stack" id="codeForm" autocomplete="off">
           <input type="text" id="code" placeholder="ENTER CODE" aria-label="Access code" maxlength="32" required autocapitalize="characters" style="text-align:center;text-transform:uppercase;letter-spacing:3px;">
@@ -167,7 +204,7 @@
       </div>
 
       <!-- Step 2: RSVP details -->
-      <div id="rsvpStep" class="hidden">
+      <div id="rsvpStep" class="hidden step">
         <form class="stack" id="rsvpForm">
           <label>Full name
             <input type="text" id="fullName" required autocomplete="name">
@@ -196,7 +233,7 @@
       </div>
 
       <!-- Confirmation -->
-      <div id="doneStep" class="hidden">
+      <div id="doneStep" class="hidden step">
         <p class="thanks">Thank you! Your RSVP has been received.</p>
         <p>We look forward to celebrating with you.</p>
       </div>
@@ -273,6 +310,24 @@
       submitBtn.textContent = "Submit RSVP";
     }
   });
+
+  // Floating teddy bears in the background
+  (function addBears() {
+    const layer = document.createElement("div");
+    layer.className = "bears";
+    layer.setAttribute("aria-hidden", "true");
+    for (let i = 0; i < 9; i++) {
+      const bear = document.createElement("span");
+      bear.className = "bear";
+      bear.textContent = "🧸";
+      bear.style.left = (Math.random() * 95) + "%";
+      bear.style.fontSize = (48 + Math.random() * 28) + "px";
+      bear.style.animationDuration = (22 + Math.random() * 16) + "s";
+      bear.style.animationDelay = (-Math.random() * 30) + "s";
+      layer.appendChild(bear);
+    }
+    document.body.prepend(layer);
+  })();
 
   function tick() {
     const diff = CONFIG.eventDate - new Date();
