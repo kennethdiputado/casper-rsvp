@@ -193,18 +193,8 @@
       <span class="tag">RSVP</span>
       <h2>Kindly confirm your attendance</h2>
 
-      <!-- Step 1: access code -->
-      <div id="codeStep" class="step">
-        <p>Type your access code to continue.</p>
-        <form class="stack" id="codeForm" autocomplete="off">
-          <input type="text" id="code" placeholder="ENTER CODE" aria-label="Access code" maxlength="32" required autocapitalize="characters" style="text-align:center;text-transform:uppercase;letter-spacing:3px;">
-          <button type="submit">Continue</button>
-          <div class="error" id="codeError" role="alert"></div>
-        </form>
-      </div>
-
       <!-- Step 2: RSVP details -->
-      <div id="rsvpStep" class="hidden step">
+      <div id="rsvpStep" class="step">
         <form class="stack" id="rsvpForm">
           <label>Full name
             <input type="text" id="fullName" required autocomplete="name">
@@ -249,38 +239,14 @@
 <script>
   // ===== EDIT THESE =====
   const CONFIG = {
-    accessCode: "Kenjaken",
     scriptUrl: "https://script.google.com/macros/s/AKfycbzPep7nO_y_BkeFkRj54vTqCL25XoKoRB16WIPVMe3XlP_csnKwnbchbDpoaJzUGx4_/exec",
     eventDate: new Date("2027-01-10T09:00:00+08:00")
   };
   // ======================
 
-  const codeForm = document.getElementById("codeForm");
-  const codeInput = document.getElementById("code");
-  const codeError = document.getElementById("codeError");
   const rsvpForm = document.getElementById("rsvpForm");
   const rsvpError = document.getElementById("rsvpError");
   const submitBtn = document.getElementById("submitBtn");
-
-  // Show and store the code in uppercase as the guest types.
-  codeInput.addEventListener("input", () => {
-    const pos = codeInput.selectionStart;
-    codeInput.value = codeInput.value.toUpperCase();
-    codeInput.setSelectionRange(pos, pos);
-  });
-
-  codeForm.addEventListener("submit", (e) => {
-    e.preventDefault();
-    if (codeInput.value.trim().toUpperCase() === CONFIG.accessCode.toUpperCase()) {
-      codeError.textContent = "";
-      document.getElementById("codeStep").classList.add("hidden");
-      document.getElementById("rsvpStep").classList.remove("hidden");
-      document.getElementById("fullName").focus();
-    } else {
-      codeError.textContent = "That code doesn't match. Please check and try again.";
-      codeInput.select();
-    }
-  });
 
   rsvpForm.addEventListener("submit", async (e) => {
     e.preventDefault();
@@ -339,6 +305,7 @@
     document.getElementById("h").textContent = Math.floor((diff % 86400000) / 3600000);
     document.getElementById("m").textContent = Math.floor((diff % 3600000) / 60000);
   }
+  document.getElementById("fullName").focus({ preventScroll: true });
   tick();
   setInterval(tick, 30000);
 </script>
