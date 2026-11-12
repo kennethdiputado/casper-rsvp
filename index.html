@@ -160,7 +160,7 @@
       <div id="codeStep">
         <p>Type your access code to continue.</p>
         <form class="stack" id="codeForm" autocomplete="off">
-          <input type="text" id="code" placeholder="ENTER CODE" aria-label="Access code" maxlength="32" required>
+          <input type="text" id="code" placeholder="ENTER CODE" aria-label="Access code" maxlength="32" required autocapitalize="characters" style="text-align:center;text-transform:uppercase;letter-spacing:3px;">
           <button type="submit">Continue</button>
           <div class="error" id="codeError" role="alert"></div>
         </form>
@@ -224,6 +224,13 @@
   const rsvpForm = document.getElementById("rsvpForm");
   const rsvpError = document.getElementById("rsvpError");
   const submitBtn = document.getElementById("submitBtn");
+
+  // Show and store the code in uppercase as the guest types.
+  codeInput.addEventListener("input", () => {
+    const pos = codeInput.selectionStart;
+    codeInput.value = codeInput.value.toUpperCase();
+    codeInput.setSelectionRange(pos, pos);
+  });
 
   codeForm.addEventListener("submit", (e) => {
     e.preventDefault();
